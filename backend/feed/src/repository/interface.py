@@ -11,8 +11,13 @@ class RepositoryInterface(ABC):
     
     @classmethod
     @abstractmethod
-    async def read(session, item_id: str):
-        ...   
+    async def get(session, item_id: str):
+        ...
+        
+    @classmethod
+    @abstractmethod
+    async def get_all(session, item_id: str):
+        ...
         
     @classmethod
     @abstractmethod

@@ -1,6 +1,6 @@
-from .mongo_repository import MongoRepository
+from .mongo_repository import MongoRepositoryPublications
 
 
 __all__ = [
-    'MongoRepository'
+    'MongoRepositoryPublications'
 ]

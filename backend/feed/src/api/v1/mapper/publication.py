@@ -1,8 +1,7 @@
 from .protocol import BaseMapper
 
 from src.api.v1.schemas.publication import Publication, TagsEnum
-from src.service.models import PublicationDTO
-
+from src.models.publication import PublicationDTO
 
 
 class PublicationMapper(BaseMapper):

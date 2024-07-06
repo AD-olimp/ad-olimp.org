@@ -1,10 +1,11 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
-from .schemas.feed import PublicationFilter, GetFeed, FeedResponse
+from .schemas.feed import PublicationSearch, GetFeed, Publication, TagsScheme
+from .mapper.feed import GetFeedMapper
 
 from src.service.feed.service import FeedService
-from src.models.feeds import GetFeedDTO, PublicationFilterDTO
-from src.models.publication import FeedListDTO
+from src.database.mongodb import get_repository
+
 
 feed_router = APIRouter(
     prefix="/feed",
@@ -12,30 +13,27 @@ feed_router = APIRouter(
 )
 
 
-# TODO: как делать гет запросы 
-@feed_router.get("/feed/{feed_filter}")
-async def get_feed(feed_filter: GetFeed) -> FeedResponse:
+@feed_router.get("/tags")
+async def get_tags() -> TagsScheme:
+    return TagsScheme()
+
+
+@feed_router.post("/feed", response_model=list[Publication])
+async def get_feed(feed_filter: GetFeed, Repo = Depends(get_repository)) -> list[Publication]:
     
-    feed_filter = GetFeedDTO(
-        start=feed_filter.start,
-        end=feed_filter.end,
-        publication_filter=PublicationFilterDTO(
-            publication_id=None,
-            tags=feed_filter.publication_filter.tags,
-            date_start=feed_filter.publication_filter.date_start,
-            date_end=feed_filter.publication_filter.date_end
+    return GetFeedMapper.to_controller(
+        FeedService(Repo).get_feeds(
+            feed_filter=GetFeedMapper.to_domain(feed_filter)
         )
     )
-    
-    result: FeedListDTO = FeedService().get_feeds(feed_filter)
-    
-    return FeedResponse(publications=result.publications)
 
-@feed_router.get("/tags")
-async def get_tags():
-    ...
 
-@feed_router.get("/search_publication/{public_filter}")
-async def search(public_filter: PublicationFilter):
-    ...
-
+@feed_router.post("/search_publication", response_model=list[Publication])
+async def search(search: PublicationSearch, Repo = Depends(get_repository)) -> list[Publication]:
+        
+    return GetFeedMapper.to_controller(
+        FeedService(Repo).search_feeds(
+            feed_filter=GetFeedMapper.to_domain(search.publication_filter),
+            search_text=search.text
+        )
+    )

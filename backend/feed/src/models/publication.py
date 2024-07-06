@@ -15,3 +15,8 @@ class PublicationDTO:
 @dataclass
 class FeedListDTO:
     publications: list[PublicationDTO]
+    
+
+@dataclass
+class TagsDTO:
+    tags: list[TagsEnum]

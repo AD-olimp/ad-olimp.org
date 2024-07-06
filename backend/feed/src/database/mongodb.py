@@ -1,8 +1,12 @@
 from pymongo import MongoClient
 from typing import List, Dict, Any
 
+from src.repository.mongo_repository import MongoRepositoryPublications
+from src.repository.interface import RepositoryInterface
+from src.config import MongoDBConfig
 
-def get_repository() -> MongoRepository:
-    client = MongoClient("mongodb://localhost:27017")
+
+def get_repository() -> RepositoryInterface:
+    client = MongoClient(MongoDBConfig.url)
     
-    return MongoRepository(client, "mydatabase", "mycollection")
+    return MongoRepositoryPublications(client, MongoDBConfig.database, MongoDBConfig.collection)
