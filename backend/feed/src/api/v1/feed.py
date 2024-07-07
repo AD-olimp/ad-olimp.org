@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
-from .schemas.feed import PublicationSearch, GetFeed, Publication, TagsScheme
-from .mapper.feed import GetFeedMapper
+from .schemas.feed import PublicationSearch, Publication, TagsScheme, PublicationFilter
+from .mapper import GetFeedMapper, PublicationFilterMapper
 
 from src.service.feed.service import FeedService
 from src.database.uow import get_uow
@@ -14,10 +14,16 @@ feed_router = APIRouter(
 
 
 @feed_router.post(path="/", response_model=list[Publication])
-async def get_feed_handler(feed_filter: GetFeed, UoW=Depends(get_uow)) -> list[Publication]:
+async def get_feed_handler(
+        start: int,
+        end: int,
+        publication_filter: PublicationFilter,
+        UoW=Depends(get_uow)
+) -> list[Publication]:
+
     return GetFeedMapper.to_controller(
         FeedService(UoW).get_feeds(
-            feed_filter=GetFeedMapper.to_domain(feed_filter)
+            feed_filter=GetFeedMapper.to_domain(start, end, publication_filter)
         )
     )
 
@@ -32,7 +38,7 @@ async def search_handler(search: PublicationSearch, UoW=Depends(get_uow)) -> lis
         
     return GetFeedMapper.to_controller(
         FeedService(UoW).search_feeds(
-            feed_filter=GetFeedMapper.to_domain(search.publication_filter),
+            feed_filter=PublicationFilterMapper.to_domain(search.publication_filter),
             search_text=search.text
         )
     )

@@ -6,7 +6,7 @@ from .interface import FeedServiceInterface
 from src.repository import RepositoryInterface, get_repository
 from src.database.uow import UnitOfWork
 
-from src.models.feeds import GetFeedDTO
+from src.models.feeds import GetFeedDTO, PublicationFilterDTO
 from src.models.publication import PublicationDTO
 
 
@@ -26,8 +26,8 @@ class FeedService(FeedServiceInterface):
     @classmethod
     def _is_similar(cls, text1, text2):
         return SequenceMatcher(None, text1, text2) >= cls.confidence_interval
-    
-    async def search_feeds(self, feed_filter: GetFeedDTO, search_text: str) -> list[PublicationDTO]:
+
+    async def search_feeds(self, feed_filter: PublicationFilterDTO, search_text: str) -> list[PublicationDTO]:
         async with self.uow as uow:
             return [
                 p async for p in await self.repo.get_all(feed_filter, uow.session)

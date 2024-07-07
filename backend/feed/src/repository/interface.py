@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from src.models import PublicationDTO, PublicationFilterDTO
+
 
 class RepositoryInterface(ABC):
     """Интерфейс сервиса по работе с публикациями"""
@@ -8,21 +10,21 @@ class RepositoryInterface(ABC):
         ...
 
     @abstractmethod
-    async def create(self, session, item):
+    async def create(self, session, publication: PublicationDTO):
         ...
     
     @abstractmethod
-    async def get(self, session, item_id: str):
+    async def get(self, session, publication_filter: PublicationFilterDTO):
         ...
         
     @abstractmethod
-    async def get_all(self, session, item_id: str):
+    async def get_all(self, session, publication_filter: PublicationFilterDTO):
         ...
         
     @abstractmethod
-    async def update(self, session, item_id: str, new_item):
+    async def update(self, session, publication_filter: PublicationFilterDTO, new_publication: PublicationDTO):
         ...
 
     @abstractmethod
-    async def delete(self, session, item_id: str):
+    async def delete(self, session, publication_filter: PublicationFilterDTO):
         ...
