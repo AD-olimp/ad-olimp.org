@@ -1,4 +1,5 @@
-from pymongo import MongoClient
+from motor.motor_asyncio import AsyncIOMotorClientSession, AsyncIOMotorCollection
+
 from dataclasses import asdict
 from .interface import RepositoryInterface
 
@@ -6,33 +7,60 @@ from src.models import PublicationDTO, PublicationFilterDTO, GetFeedDTO
 
 
 class MongoRepositoryPublications(RepositoryInterface):
-    def __init__(
-            self,
-            client: MongoClient,
-            db_name: str,
-            collection_name: str
-        ):
-        
-        self.db = client[db_name]
-        self.collection = self.db[collection_name]
+    def __init__(self, collection: AsyncIOMotorCollection):
+        self.collection = collection
 
-    async def create(self, publication: PublicationDTO) -> str:
-        return str(
-            self.collection\
-                .insert_one(asdict(publication))\
-                .inserted_id
+    async def create(
+            self,
+            session: AsyncIOMotorClientSession,
+            publication: PublicationDTO
+    ) -> str:
+        await self.collection.insert_one(
+            document=asdict(publication),
+            session=session
         )
 
-    async def get(self, publication_filter: PublicationFilterDTO) -> PublicationDTO:
-        return self.collection.find_one(asdict(publication_filter))
+    async def get(
+            self,
+            session: AsyncIOMotorClientSession,
+            publication_filter: PublicationFilterDTO
+    ) -> PublicationDTO:
 
-    async def get_all(self, publication_filter: PublicationFilterDTO) -> GetFeedDTO:
-        return GetFeedDTO(**self.collection.find(publication_filter))
+        return await self.collection.find_one(
+            document=asdict(publication_filter),
+            session=session
+        )
 
-    async def update(self, publication_filter: PublicationFilterDTO, new_publication: PublicationDTO) -> bool:
-        result = self.collection.update_one(publication_filter, {'$set': new_publication})
-        return result.modified_count > 0
+    async def get_all(
+            self, session: AsyncIOMotorClientSession,
+            publication_filter: PublicationFilterDTO
+    ) -> GetFeedDTO:
 
-    async def delete(self, publication_filter: PublicationFilterDTO) -> bool:
-        result = self.collection.delete_one(asdict(publication_filter))
-        return result.deleted_count > 0
+        response = await self.collection.find(
+            document=asdict(publication_filter),
+            session=session
+        )
+        print(response)
+
+        return response
+
+    async def update(
+            self,
+            session: AsyncIOMotorClientSession,
+            publication_filter: PublicationFilterDTO,
+            new_publication: PublicationDTO
+    ) -> bool:
+
+        await self.collection.update_one(
+            asdict(publication_filter),
+            update={'$set': new_publication},
+            session=session
+        )
+
+    async def delete(
+            self,
+            session: AsyncIOMotorClientSession,
+            publication_filter: PublicationFilterDTO
+    ) -> bool:
+
+        await self.collection.delete_one(asdict(publication_filter))

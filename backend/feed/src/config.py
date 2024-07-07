@@ -9,16 +9,17 @@ if os.path.exists(dotenv_path):
 
 
 @dataclass
+class NGINXConfig:
+    APP_PREFIX: str = os.getenv("APP_NGINX_PREFIX")
+
+
+@dataclass
 class MongoDBConfig:
     host: str = os.getenv("MONGODB_HOST")
     port: str = os.getenv("MONGODB_PORT")
-    url: str = field(init=False)
     database: str = os.getenv("DATABASE")
     collection: str = os.getenv("collection")
-    
+    url: str = field(init=False)
     
     def __post_init__(self):
         self.url = f"mongodb://{self.host}:{self.port}"
-        
-    
-    

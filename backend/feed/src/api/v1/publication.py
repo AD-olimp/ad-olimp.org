@@ -18,10 +18,6 @@ async def get_publication(publication_id: str) -> Publication:
     ...
 
 @publication_router.put("/{publication_id}")
-async def edit_field_publication(publication_id: str, field, value):
-    ...
-
-@publication_router.put("/{publication_id}")
 async def edit_publication(publication_id: str, new_publication: Publication):
     ...
 
