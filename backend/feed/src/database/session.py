@@ -6,6 +6,7 @@ from src.config import MongoDBConfig
 class AsyncMongoDB:
     client = AsyncIOMotorClient(MongoDBConfig.url)
     database = client[MongoDBConfig.database]
+    pub_collection = database[MongoDBConfig.publications_collection]
 
     def __init__(self):
         # Сессия БД. будет создаваться каждый раз в конструкции

@@ -1,7 +1,6 @@
 from bson import ObjectId
 from fastapi import APIRouter, Depends
 
-
 from src.models import Publication
 from src.api.v1.validation import check_publication_existence
 from src.service import PublicationServiceInterface

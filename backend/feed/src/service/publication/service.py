@@ -2,8 +2,8 @@ from bson import ObjectId
 from datetime import date
 from fastapi import Depends
 
-from src.models import Publication
 from src.database import get_db
+from src.models import Publication
 from src.repository import get_repository
 from src.repository import RepositoryInterface
 from .interface import PublicationServiceInterface
@@ -11,8 +11,6 @@ from .interface import PublicationServiceInterface
 
 class PublicationService(PublicationServiceInterface):
     """Сервис для работы с постами"""
-
-    # Название коллекции с публикациями
 
     def __init__(self):
         self.repo: RepositoryInterface = get_repository()
@@ -23,8 +21,8 @@ class PublicationService(PublicationServiceInterface):
             session=Depends(get_db)
     ) -> None:
 
-        async with get_db() as db:
-            await self.repo.add(session=db.session, new_publication=publication)
+        async with get_db() as session:
+            await self.repo.add(session=session, new_publication=publication)
 
     async def get_publication_by_id(self, publication_id: ObjectId):
         async with get_db() as session:
@@ -56,6 +54,6 @@ class PublicationService(PublicationServiceInterface):
                 new_publication=new_publication
             )
 
-    async def delete_publication(self, publication_id: str):
+    async def delete_publication(self, publication_id: ObjectId):
         async with get_db() as session:
             return await self.repo.delete(session=session, publication_id=publication_id)

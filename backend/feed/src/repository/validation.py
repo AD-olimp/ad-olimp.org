@@ -6,9 +6,10 @@ def exist_validation(raise_if_exists=False):
     def decorator(f: Callable):
         @wraps(f)
         async def wrapper(*args, **kwargs):
+            print(args, kwargs, 'ДАЙТЕ СЕКС')
             publication_id = kwargs.get('publication_id')
             session = kwargs.get('session')
-            self = kwargs.get('self')   # ебать я придумал конечно
+            self = kwargs.get('self') # ебать я придумал конечно
 
             if publication_id is None:
                 raise ValueError('Для проверки существования требуется publication_id')
