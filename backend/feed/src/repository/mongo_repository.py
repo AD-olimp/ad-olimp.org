@@ -1,66 +1,36 @@
-from motor.motor_asyncio import AsyncIOMotorClientSession, AsyncIOMotorCollection
+from bson import ObjectId
+from typing import Optional, Any
+from motor.motor_asyncio import AsyncIOMotorDatabase
 
-from dataclasses import asdict
 from .interface import RepositoryInterface
+from .validation import exist_validation
+from src.models import Publication
+from src.config import MongoDBConfig
 
-from src.models import PublicationDTO, PublicationFilterDTO, GetFeedDTO
 
+class PublicationsMongoRepository(RepositoryInterface):
+    def __init__(self, database: AsyncIOMotorDatabase):
+        self.collection = database[MongoDBConfig.publications_collection]
 
-class MongoRepositoryPublications(RepositoryInterface):
-    def __init__(self, collection: AsyncIOMotorCollection):
-        self.collection = collection
+    async def add(self, session, new_publication: Publication) -> None:
+        await self.collection.insert_one(new_publication.dict(), session=session)
 
-    async def create(
-            self,
-            session: AsyncIOMotorClientSession,
-            publication: PublicationDTO
-    ) -> str:
-        await self.collection.insert_one(
-            document=asdict(publication),
-            session=session
-        )
+    @exist_validation(raise_if_exists=False)
+    async def get(self, session, publication_filter: dict[Any]) -> Publication:
+        return Publication(**(
+            await self.collection.find_one(publication_filter, session=session)
+        ))
 
-    async def get(
-            self,
-            session: AsyncIOMotorClientSession,
-            publication_filter: PublicationFilterDTO
-    ) -> PublicationDTO:
+    async def get_all(self, session, publication_filters: dict[Any]) -> list[Optional[Publication]]:
+        return [
+            Publication(**pub) for pub in
+            await self.collection.find(publication_filters, session=session)
+        ]
 
-        return await self.collection.find_one(
-            document=asdict(publication_filter),
-            session=session
-        )
+    @exist_validation(raise_if_exists=False)
+    async def update(self, session, publication_id: ObjectId, new_publication: Publication) -> None:
+        await self.collection.update_one(session, {"_id": publication_id}, {'$set': new_publication})
 
-    async def get_all(
-            self, session: AsyncIOMotorClientSession,
-            publication_filter: PublicationFilterDTO
-    ) -> GetFeedDTO:
-
-        response = await self.collection.find(
-            document=asdict(publication_filter),
-            session=session
-        )
-        print(response)
-
-        return response
-
-    async def update(
-            self,
-            session: AsyncIOMotorClientSession,
-            publication_filter: PublicationFilterDTO,
-            new_publication: PublicationDTO
-    ) -> bool:
-
-        await self.collection.update_one(
-            asdict(publication_filter),
-            update={'$set': new_publication},
-            session=session
-        )
-
-    async def delete(
-            self,
-            session: AsyncIOMotorClientSession,
-            publication_filter: PublicationFilterDTO
-    ) -> bool:
-
-        await self.collection.delete_one(asdict(publication_filter))
+    @exist_validation(raise_if_exists=False)
+    async def delete(self, session, publication_id: ObjectId) -> None:
+        await self.collection.delete_one(session, {'_id': publication_id})

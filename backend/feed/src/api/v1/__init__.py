@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from .publication import publication_router
-from .feed import feed_router
+from src.api.v1.handlers.publication import publication_router
+from src.api.v1.handlers.feed import feed_router
 
 router_v1 = APIRouter(prefix="/v1")
 

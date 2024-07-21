@@ -1,10 +1,12 @@
-from .publication import PublicationDTO, FeedListDTO
-from .feeds import PublicationFilterDTO, GetFeedDTO
+from .publication import Publication, PublicationFilter, PublicationSearch
+from .feeds import GetFeed, TagsScheme
 
 
 __all__ = [
-    'PublicationDTO',
-    'PublicationFilterDTO',
-    'GetFeedDTO',
-    'FeedListDTO'
+    'Publication',
+    'PublicationFilter',
+    'PublicationSearch',
+    'GetFeed',
+    'TagsScheme',
 ]
+

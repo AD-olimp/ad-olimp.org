@@ -1,22 +1,29 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
+from enum import Enum
 
-from src.common.models import TagsEnum
+
+class TagsEnum(str, Enum):
+    economics = 'Экономика'
+    informatics = 'Информатика'
+    admission = 'Поступление'
+    vseros = 'Всерос'
+    moscow = 'Сборная москвы'
+    education = 'Образование'
 
 
-@dataclass
-class PublicationDTO:
-    publication_id: str
+class Publication(BaseModel):
     title: str
     tags: list[TagsEnum]
     pictures_path: list[str]
     text: str
 
 
-@dataclass
-class FeedListDTO:
-    publications: list[PublicationDTO]
-    
-
-@dataclass
-class TagsDTO:
+class PublicationFilter(BaseModel):
     tags: list[TagsEnum]
+    date_start: str
+    date_end: str
+
+
+class PublicationSearch(BaseModel):
+    publication_filter: PublicationFilter
+    text: str

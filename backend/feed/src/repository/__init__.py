@@ -1,13 +1,13 @@
-from .mongo_repository import MongoRepositoryPublications
+from .mongo_repository import PublicationsMongoRepository
 from .interface import RepositoryInterface
+from src.database import AsyncMongoDB
 
 
-def get_repository(collection):
-    return MongoRepositoryPublications(collection)
+def get_repository() -> PublicationsMongoRepository:
+    return PublicationsMongoRepository(database=AsyncMongoDB.database)
 
 
 __all__ = [
-    'MongoRepositoryPublications',
+    'get_repository',
     'RepositoryInterface',
-    'get_repository'
 ]

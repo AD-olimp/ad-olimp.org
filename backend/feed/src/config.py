@@ -18,8 +18,13 @@ class MongoDBConfig:
     host: str = os.getenv("MONGODB_HOST")
     port: str = os.getenv("MONGODB_PORT")
     database: str = os.getenv("DATABASE")
-    collection: str = os.getenv("collection")
-    url: str = field(init=False)
-    
-    def __post_init__(self):
-        self.url = f"mongodb://{self.host}:{self.port}"
+    publications_collection: str = os.getenv("PUBLICATION_COLLECTION")
+    url: str = f"mongodb://{host}:{port}"
+
+
+app_config = {
+    'title': "ad-olimp.org publications",
+    'description': "Сервис для работы с публикациями в ленту",
+    'version': "1.0",
+    'root_path': NGINXConfig.APP_PREFIX
+}

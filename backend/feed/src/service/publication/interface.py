@@ -1,29 +1,22 @@
+from bson import ObjectId
 from abc import ABC, abstractmethod
 
 
 class PublicationServiceInterface(ABC):
     """Интерфейс сервиса по работе с публикациями"""
-    
-    
-    @classmethod
+
     @abstractmethod
-    async def create_publication(session, publication):
+    async def create_publication(self, publication):
         ...
-    
-    
-    @classmethod
+
     @abstractmethod
-    async def get_publication(session, publication_id: str):
+    async def get_publication_by_id(self, publication_id: ObjectId):
         ...
         
-        
-    @classmethod
     @abstractmethod
-    async def update_publication(session, publication_id: str, new_publication):
+    async def update_publication(self, publication_id: ObjectId, new_publication):
         ...
-    
-    
-    @classmethod
+
     @abstractmethod
-    async def delete_publication(session, publication_id: str):
+    async def delete_publication(self, publication_id: ObjectId):
         ...

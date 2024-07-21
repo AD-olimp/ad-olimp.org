@@ -1,30 +1,31 @@
+from typing import Any
+from bson import ObjectId
 from abc import ABC, abstractmethod
 
-from src.models import PublicationDTO, PublicationFilterDTO
+from src.models import Publication
 
 
 class RepositoryInterface(ABC):
     """Интерфейс сервиса по работе с публикациями"""
+
+    __slots__ = ('collection', )
+
     @abstractmethod
-    def __init__(self, collection):
+    async def add(self, session, new_publication: Publication) -> None:
         ...
 
     @abstractmethod
-    async def create(self, session, publication: PublicationDTO):
-        ...
-    
-    @abstractmethod
-    async def get(self, session, publication_filter: PublicationFilterDTO):
-        ...
-        
-    @abstractmethod
-    async def get_all(self, session, publication_filter: PublicationFilterDTO):
-        ...
-        
-    @abstractmethod
-    async def update(self, session, publication_filter: PublicationFilterDTO, new_publication: PublicationDTO):
+    async def get(self, session, publication_filter: dict[Any]) -> Publication:
         ...
 
     @abstractmethod
-    async def delete(self, session, publication_filter: PublicationFilterDTO):
+    async def get_all(self, session, publication_filters: dict[Any]) -> list[Publication]:
+        ...
+
+    @abstractmethod
+    async def update(self, session, publication_id: ObjectId, new_publication: Publication) -> None:
+        ...
+
+    @abstractmethod
+    async def delete(self, session, publication_id: ObjectId) -> None:
         ...
