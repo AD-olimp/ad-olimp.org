@@ -15,7 +15,7 @@ publication_router = APIRouter(
 
 @publication_router.post("/")
 async def create_publication(publication: Publication, service=Depends(get_publication_service)):
-    await service.create_publication(publication)
+    return str(await service.create_publication(publication))
 
 
 @check_publication_existence
