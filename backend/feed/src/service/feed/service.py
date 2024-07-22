@@ -25,5 +25,6 @@ class FeedService(FeedServiceInterface):
             return (await self.repo.search_by_text(
                 session=session,
                 text=search_filter.search_filter.text,
-                publication_filters=search_filter.search_filter.publication_filter
+                publication_filters=search_filter.search_filter.publication_filter,
+                end=search_filter.end
             ))[search_filter.start: search_filter.end]

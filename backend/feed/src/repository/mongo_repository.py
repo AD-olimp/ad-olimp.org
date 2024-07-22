@@ -1,7 +1,7 @@
 from bson import ObjectId
 from typing import Optional, Any
 from .interface import RepositoryInterface
-from src.models import Publication, GetFeed, PublicationSearch, PublicationFilter
+from src.models import Publication, GetFeed, PublicationFilter
 from ..database import AsyncMongoDB
 from ..service.mapper.feed import transform_filter
 
@@ -18,12 +18,9 @@ class PublicationsMongoRepository(RepositoryInterface):
 
     async def get_by_filter(self, session: AsyncMongoDB, publication_filters: GetFeed) -> list[Optional[Publication]]:
         # Просто для получения ленты
-        # print(publication_filters)
-        # print(transform_filter(publication_filters))
+
         result = await (session.pub_collection.find(transform_filter(publication_filters))
                         .to_list(length=publication_filters.end))
-
-        # print(list(result))
 
         return [Publication(**pub) for pub in result]
 
@@ -31,31 +28,20 @@ class PublicationsMongoRepository(RepositoryInterface):
             self,
             session: AsyncMongoDB,
             text: str,
-            publication_filters: PublicationFilter
+            publication_filters: PublicationFilter,
+            end: int
     ) -> list[Optional[Publication]]:
         # Для получения ленты с поиском по тексту
 
-        # result = session.pub_collection.find(
-        #     {"$text": {"$search": text}}, {"score": {"$meta": "textScore"}}
-        # ).sort({"score": {"$meta": "textScore"}})
         session.pub_collection.create_index({"text": "text"})
         result = session.pub_collection.find(
             {"$text": {"$search": text}}, {"score": {"$meta": "textScore"}}
         ).sort({"score": {"$meta": "textScore"}})
 
-        result = await result.to_list(5)
+        result = await result.to_list(length=end)
 
         print(result)
 
-        # print([
-        #     Publication(
-        #         text=pub['text'],
-        #         title=pub['title'],
-        #         tags=pub['tags'],
-        #         pictures_path=pub['pictures_path'],
-        #         data=pub['data']
-        #     ) for pub in result
-        # ])
         return [
             Publication(
                 text=pub['text'],
