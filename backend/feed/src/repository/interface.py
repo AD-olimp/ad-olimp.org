@@ -19,7 +19,11 @@ class RepositoryInterface(ABC):
         ...
 
     @abstractmethod
-    async def get_all(self, session, publication_filters: dict[Any]) -> list[Publication]:
+    async def get_by_filter(self, session, publication_filters: dict[Any]) -> list[Publication]:
+        ...
+
+    @abstractmethod
+    async def search_by_text(self, session, text: str, publication_filters: dict[Any]) -> list[Publication]:
         ...
 
     @abstractmethod

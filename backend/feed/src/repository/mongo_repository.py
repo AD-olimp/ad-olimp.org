@@ -14,21 +14,32 @@ class PublicationsMongoRepository(RepositoryInterface):
             await session.pub_collection.find_one(publication_filter)
         ))
 
-    async def get_all(self, session: AsyncMongoDB, publication_filters: dict[Any]) -> list[Optional[Publication]]:
-        return [
-            Publication(**pub) for pub in
-            await session.pub_collection.find(publication_filters)
-        ]
+    async def get_by_filter(self, session: AsyncMongoDB, publication_filters: dict[Any]) -> list[Optional[Publication]]:
+        # Просто для получения ленты
+        result = await session.pub_collection.find(publication_filters)
 
-    async def get_by_text(self, session: AsyncMongoDB, text: str) -> list[Optional[Publication]]:
+        return [Publication(**pub) for pub in result]
+
+    async def search_by_text(
+            self,
+            session: AsyncMongoDB,
+            text: str,
+            publication_filters: dict[Any]
+    ) -> list[Optional[Publication]]:
+        # Для получения ленты с поиском по тексту
+
+        result = session.pub_collection.find(
+            {"$text": {"$search": text}}, {"score": {"$meta": "textScore"}}
+        ).sort({"score": {"$meta": "textScore"}})
+
         return [
-            Publication(text=pub['text'],
-                        title=pub['title'],
-                        tags=pub['tags'],
-                        pictures_path=pub['pictures_path'],
-                        data=pub['data']) for pub in
-            await session.pub_collection.find({"$text": {"$search": text}},
-                                              {"score": {"$meta": "textScore"}}).sort({"score": {"$meta": "textScore"}})
+            Publication(
+                text=pub['text'],
+                title=pub['title'],
+                tags=pub['tags'],
+                pictures_path=pub['pictures_path'],
+                data=pub['data']
+            ) for pub in result
         ]
 
     async def update(self, session: AsyncMongoDB, publication_id: ObjectId, new_publication: Publication) -> None:
