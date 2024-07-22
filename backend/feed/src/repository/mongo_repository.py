@@ -20,6 +20,17 @@ class PublicationsMongoRepository(RepositoryInterface):
             await session.pub_collection.find(publication_filters)
         ]
 
+    async def get_by_text(self, session: AsyncMongoDB, text: str) -> list[Optional[Publication]]:
+        return [
+            Publication(text=pub['text'],
+                        title=pub['title'],
+                        tags=pub['tags'],
+                        pictures_path=pub['pictures_path'],
+                        data=pub['data']) for pub in
+            await session.pub_collection.find({"$text": {"$search": text}},
+                                              {"score": {"$meta": "textScore"}}).sort({"score": {"$meta": "textScore"}})
+        ]
+
     async def update(self, session: AsyncMongoDB, publication_id: ObjectId, new_publication: Publication) -> None:
         await session.pub_collection.update_one({"_id": publication_id}, {'$set': new_publication.dict()})
 

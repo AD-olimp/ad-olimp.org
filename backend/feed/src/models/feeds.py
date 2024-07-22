@@ -1,10 +1,16 @@
 from pydantic import BaseModel, Field
 
-from .publication import PublicationFilter, TagsEnum
+from .publication import PublicationFilter, TagsEnum, PublicationSearch
 
 
 class GetFeed(BaseModel):
     publication_filter: PublicationFilter
+    start: int
+    end: int
+
+
+class GetSearch(BaseModel):
+    search_filter: PublicationSearch
     start: int
     end: int
 

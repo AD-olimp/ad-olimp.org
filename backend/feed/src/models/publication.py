@@ -16,6 +16,7 @@ class Publication(BaseModel):
     tags: list[TagsEnum]
     pictures_path: list[str]
     text: str
+    data: str
 
 
 class PublicationFilter(BaseModel):
