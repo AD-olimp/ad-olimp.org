@@ -26,5 +26,6 @@ class FeedService(FeedServiceInterface):
                 session=session,
                 text=search_filter.search_filter.text,
                 publication_filters=search_filter.search_filter.publication_filter,
-                end=search_filter.end
+                end=search_filter.end,
+                variable=search_filter.variable.value
             ))[search_filter.start: search_filter.end]

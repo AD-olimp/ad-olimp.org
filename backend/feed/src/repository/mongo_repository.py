@@ -29,11 +29,12 @@ class PublicationsMongoRepository(RepositoryInterface):
             session: AsyncMongoDB,
             text: str,
             publication_filters: PublicationFilter,
-            end: int
+            end: int,
+            variable: str
     ) -> list[Optional[Publication]]:
         # Для получения ленты с поиском по тексту
 
-        session.pub_collection.create_index({"text": "text"})
+        session.pub_collection.create_index({variable: "text"})
         result = session.pub_collection.find(
             {"$text": {"$search": text}}, {"score": {"$meta": "textScore"}}
         ).sort({"score": {"$meta": "textScore"}})

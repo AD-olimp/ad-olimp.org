@@ -2,6 +2,11 @@ from pydantic import BaseModel
 from enum import Enum
 
 
+class VariablesEnum(str, Enum):
+    title = "title"
+    text = "text"
+
+
 class TagsEnum(str, Enum):
     economics = 'Экономика'
     informatics = 'Информатика'

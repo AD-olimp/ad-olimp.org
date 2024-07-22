@@ -24,7 +24,8 @@ class RepositoryInterface(ABC):
         ...
 
     @abstractmethod
-    async def search_by_text(self, session, text: str, publication_filters: PublicationFilter, end: int) -> list[Publication]:
+    async def search_by_text(self, session, text: str,
+                             publication_filters: PublicationFilter, end: int, variable: str) -> list[Publication]:
         ...
 
     @abstractmethod
