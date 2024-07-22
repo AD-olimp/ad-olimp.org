@@ -16,14 +16,14 @@ class FeedService(FeedServiceInterface):
 
     async def get_feeds(self, feeds_filter: GetFeed):
         async with get_db() as session:
-            await self.repo.get_by_filter(
+            return (await self.repo.get_by_filter(
                 session=session, publication_filters=feeds_filter.publication_filter.dict()
-            )[feeds_filter.start: feeds_filter.end]
+            ))[feeds_filter.start:feeds_filter.end]
 
     async def get_search(self, search_filter: GetSearch):
         async with get_db() as session:
-            await self.repo.search_by_text(
+            return (await self.repo.search_by_text(
                 session=session,
                 text=search_filter.search_filter.text,
                 publication_filters=search_filter.search_filter.dict()
-            )[search_filter.start: search_filter.end]
+            ))[search_filter.start: search_filter.end]

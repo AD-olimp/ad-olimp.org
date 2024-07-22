@@ -16,7 +16,9 @@ class PublicationsMongoRepository(RepositoryInterface):
 
     async def get_by_filter(self, session: AsyncMongoDB, publication_filters: dict[Any]) -> list[Optional[Publication]]:
         # Просто для получения ленты
-        result = await session.pub_collection.find(publication_filters)
+        result = await session.pub_collection.find(publication_filters).to_list(5)
+
+        print(list(result))
 
         return [Publication(**pub) for pub in result]
 
@@ -39,7 +41,7 @@ class PublicationsMongoRepository(RepositoryInterface):
                 tags=pub['tags'],
                 pictures_path=pub['pictures_path'],
                 data=pub['data']
-            ) for pub in result
+            ) for pub in await result.to_list(5)
         ]
 
     async def update(self, session: AsyncMongoDB, publication_id: ObjectId, new_publication: Publication) -> None:
