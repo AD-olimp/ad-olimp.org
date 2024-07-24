@@ -11,13 +11,13 @@ feed_router = APIRouter(
     tags=["Feed"]
 )
 
-# закомментил, потому что полностью заменяется хендлером search
-# @feed_router.post(path="/", response_model=list[Publication])
-# async def get_feed_handler(
-#         get_feed: GetFeed,
-#         service: FeedServiceInterface = Depends(get_feed_service)
-# ) -> list[Publication]:
-#     return await service.get_feeds(feeds_filter=get_feed)
+
+@feed_router.post(path="/", response_model=list[Publication])
+async def get_feed_handler(
+        get_feed: GetFeed,
+        service: FeedServiceInterface = Depends(get_feed_service)
+) -> list[Publication]:
+    return await service.get_feeds(feeds_filter=get_feed)
 
 
 @feed_router.get("/tags")
