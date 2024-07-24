@@ -4,7 +4,7 @@ from .interface import RepositoryInterface
 from src.models import Publication, GetFeed, PublicationFilter
 from ..database import AsyncMongoDB
 from ..models.feeds import GetSearch
-from ..service.mapper.feed import transform_filter, get_pipeline
+from ..service.mapper.feed import transform_filter, get_query
 
 
 class PublicationsMongoRepository(RepositoryInterface):
@@ -30,10 +30,9 @@ class PublicationsMongoRepository(RepositoryInterface):
             session: AsyncMongoDB,
             search_filter: GetSearch
     ) -> list[Optional[Publication]]:
-        pipeline_part_1, pipeline_part_2, used_text_filter = get_pipeline(search_filter)
-        statement = session.pub_collection.find(pipeline_part_1, pipeline_part_2)
-        statement = statement.sort({"score": {"$meta": "textScore"}}) if used_text_filter else statement
-        result = await statement.to_list(length=search_filter.end)
+        base_query, score_query = get_query(search_filter)
+        result = await (session.pub_collection.find(base_query, score_query)
+                        .sort({"score": {"$meta": "textScore"}}).to_list(length=search_filter.end))
 
         return [
             Publication(
