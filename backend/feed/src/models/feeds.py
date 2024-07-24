@@ -11,7 +11,6 @@ class GetFeed(BaseModel):
 
 class GetSearch(BaseModel):
     search_filter: PublicationSearch
-    variable: VariablesEnum
     start: int
     end: int
 

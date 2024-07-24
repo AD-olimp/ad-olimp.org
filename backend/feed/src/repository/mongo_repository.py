@@ -3,7 +3,8 @@ from typing import Optional, Any
 from .interface import RepositoryInterface
 from src.models import Publication, GetFeed, PublicationFilter
 from ..database import AsyncMongoDB
-from ..service.mapper.feed import transform_filter
+from ..models.feeds import GetSearch
+from ..service.mapper.feed import transform_filter, get_pipeline
 
 
 class PublicationsMongoRepository(RepositoryInterface):
@@ -18,7 +19,7 @@ class PublicationsMongoRepository(RepositoryInterface):
 
     async def get_by_filter(self, session: AsyncMongoDB, publication_filters: GetFeed) -> list[Optional[Publication]]:
         # Просто для получения ленты
-
+        session.pub_collection.create_index({"text": "text"})
         result = await (session.pub_collection.find(transform_filter(publication_filters))
                         .to_list(length=publication_filters.end))
 
@@ -27,21 +28,12 @@ class PublicationsMongoRepository(RepositoryInterface):
     async def search_by_text(
             self,
             session: AsyncMongoDB,
-            text: str,
-            publication_filters: PublicationFilter,
-            end: int,
-            variable: str
+            search_filter: GetSearch
     ) -> list[Optional[Publication]]:
-        # Для получения ленты с поиском по тексту
-
-        session.pub_collection.create_index({variable: "text"})
-        result = session.pub_collection.find(
-            {"$text": {"$search": text}}, {"score": {"$meta": "textScore"}}
-        ).sort({"score": {"$meta": "textScore"}})
-
-        result = await result.to_list(length=end)
-
-        print(result)
+        pipeline_part_1, pipeline_part_2, used_text_filter = get_pipeline(search_filter)
+        statement = session.pub_collection.find(pipeline_part_1, pipeline_part_2)
+        statement = statement.sort({"score": {"$meta": "textScore"}}) if used_text_filter else statement
+        result = await statement.to_list(length=search_filter.end)
 
         return [
             Publication(

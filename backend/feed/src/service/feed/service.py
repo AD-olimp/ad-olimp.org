@@ -24,8 +24,5 @@ class FeedService(FeedServiceInterface):
         async with get_db() as session:
             return (await self.repo.search_by_text(
                 session=session,
-                text=search_filter.search_filter.text,
-                publication_filters=search_filter.search_filter.publication_filter,
-                end=search_filter.end,
-                variable=search_filter.variable.value
+                search_filter=search_filter
             ))[search_filter.start: search_filter.end]
