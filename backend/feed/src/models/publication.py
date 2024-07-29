@@ -1,5 +1,11 @@
 from pydantic import BaseModel
 from enum import Enum
+from datetime import datetime
+
+
+class VariablesEnum(str, Enum):
+    title = "title"
+    text = "text"
 
 
 class TagsEnum(str, Enum):
@@ -16,13 +22,13 @@ class Publication(BaseModel):
     tags: list[TagsEnum]
     pictures_path: list[str]
     text: str
-    data: str
+    data: datetime
 
 
 class PublicationFilter(BaseModel):
     tags: list[TagsEnum]
-    date_start: str
-    date_end: str
+    date_start: datetime
+    date_end: datetime
 
 
 class PublicationSearch(BaseModel):

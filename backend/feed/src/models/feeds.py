@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 
-from .publication import PublicationFilter, TagsEnum, PublicationSearch
+from .publication import PublicationFilter, TagsEnum, PublicationSearch, VariablesEnum
 
 
 class GetFeed(BaseModel):

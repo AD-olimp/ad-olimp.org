@@ -22,7 +22,7 @@ class PublicationService(PublicationServiceInterface):
     ) -> None:
 
         async with get_db() as session:
-            await self.repo.add(session=session, new_publication=publication)
+            return await self.repo.add(session=session, new_publication=publication)
 
     async def get_publication_by_id(self, publication_id: ObjectId):
         async with get_db() as session:

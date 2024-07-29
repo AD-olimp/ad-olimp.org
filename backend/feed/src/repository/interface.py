@@ -2,7 +2,8 @@ from typing import Any
 from bson import ObjectId
 from abc import ABC, abstractmethod
 
-from src.models import Publication
+from src.models import Publication, GetFeed, PublicationSearch, PublicationFilter
+from src.models.feeds import GetSearch
 
 
 class RepositoryInterface(ABC):
@@ -19,11 +20,11 @@ class RepositoryInterface(ABC):
         ...
 
     @abstractmethod
-    async def get_by_filter(self, session, publication_filters: dict[Any]) -> list[Publication]:
+    async def get_by_filter(self, session, publication_filters: GetFeed) -> list[Publication]:
         ...
 
     @abstractmethod
-    async def search_by_text(self, session, text: str, publication_filters: dict[Any]) -> list[Publication]:
+    async def search_by_text(self, session, search_filter: GetSearch) -> list[Publication]:
         ...
 
     @abstractmethod
