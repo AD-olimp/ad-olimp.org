@@ -1,9 +1,10 @@
 from fastapi import APIRouter
 
-from .dashboard import dashboard_router
-from .forecast import forecast_router
+from src.api.v1.handlers.data_feed_handlers import data_feed_handler_router
+from src.api.v1.handlers.data_handlers import data_handler_router
+
 
 router_v1 = APIRouter(prefix="/v1")
 
-router_v1.include_router(dashboard_router)
-router_v1.include_router(forecast_router)
+router_v1.include_router(data_handler_router)
+router_v1.include_router(data_feed_handler_router)

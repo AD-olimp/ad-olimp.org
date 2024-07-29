@@ -1,18 +1,12 @@
 import datetime
-from enum import Enum
-from typing import Optional, Union, TypeAlias
-from pydantic import (
-    BaseModel,
-    Field,
-    ValidationError,
-    field_validator
-)
+from typing import Optional
+from pydantic import BaseModel, Field, ValidationError, field_validator
 
-from src.models.common import OlympTitles, Step, Grades
+from src.models.common import OlympTitle, Step, Grades
 
 
 class OlympData(BaseModel):
-    title: OlympTitles  # Название олимпы
+    title: OlympTitle  # Название олимпы
     step: Step  # Этап олимпиады
     grade: list[Grades]  # Диплом участников
     points: list[float]  # Баллы участников
@@ -23,14 +17,10 @@ class OlympData(BaseModel):
     passing_point: Optional[float]  # Граничный балл
 
 
-class OlympDataList:
-    data: list[OlympData]
-
-
 class OlympDataFilter(BaseModel):
     year: Optional[list[int]] = Field(default=datetime.datetime.now().year)
     user_class: Optional[list[int]] = Field(default=[9, 10, 11])
-    title: Optional[list[OlympTitles]]
+    title: Optional[list[OlympTitle]]
     step: Optional[list[Step]]
 
     @classmethod
@@ -45,18 +35,21 @@ class OlympDataFilter(BaseModel):
 
 
 class PassingData(BaseModel):
-    title: OlympTitles           # Название олимпы
-    user_class: Optional[int]    # Какой класс писал олимпиаду
-    date_start: str              # Даты (лучше строкой)
-    date_end: str              # Даты (лучше строкой)
+    title: OlympTitle            # Название олимпы
     passing_points: list[float]  # Проходные баллы участников
+    years: list[str]             # Даты (лучше строкой)
+    user_class: list[int]        # Какой класс писал олимпиаду
 
 
-class PassingDataList:
-    data: list[PassingData]
+class BoundaryData(BaseModel):
+    title: OlympTitle                        # Название олимпы
+    winner_boundary_points: list[float]      # Граничные баллы на победителя
+    pre_winner_boundary_points: list[float]  # Проходные баллы участников
+    years: list[str]                         # Даты (лучше строкой)
+    user_class: list[int]                    # Какой класс писал олимпиаду
 
 
 class PassingDataFilter:
-    title: Optional[list[str]]
+    titles: Optional[list[str]]
     step: Optional[list[Step]]
     user_class: Optional[list[int]]
