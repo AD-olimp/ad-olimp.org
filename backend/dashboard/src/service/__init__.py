@@ -15,4 +15,7 @@ def get_passing_service():
     return PassingService()
 
 
-__all__ = ['get_olymp_data_service', 'get_boundary_service', 'get_passing_service']
+__all__ = [
+    'get_olymp_data_service', 'get_boundary_service', 'get_passing_service',
+    'OlympDataService', 'BoundaryService', 'PassingService'
+]

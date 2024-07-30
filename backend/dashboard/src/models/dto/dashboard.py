@@ -41,6 +41,12 @@ class PassingData(BaseModel):
     user_class: list[int]        # Какой класс писал олимпиаду
 
 
+class PassingDataFilter:
+    title: Optional[list[OlympTitle]]
+    year: Optional[list[int]] = Field(default=datetime.datetime.now().year)
+    user_class: Optional[list[int]] = Field(default=[9, 10, 11])
+
+
 class BoundaryData(BaseModel):
     title: OlympTitle                        # Название олимпы
     winner_boundary_points: list[float]      # Граничные баллы на победителя
@@ -48,8 +54,3 @@ class BoundaryData(BaseModel):
     years: list[str]                         # Даты (лучше строкой)
     user_class: list[int]                    # Какой класс писал олимпиаду
 
-
-class PassingDataFilter:
-    titles: Optional[list[str]]
-    step: Optional[list[Step]]
-    user_class: Optional[list[int]]
