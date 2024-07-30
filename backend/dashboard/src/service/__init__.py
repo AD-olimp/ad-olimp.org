@@ -1,5 +1,18 @@
-from .publication import PublicationService, PublicationServiceInterface
-from .feed import FeedService
+from .olymp.service import OlympDataService
+from .boundary.service import BoundaryService
+from .passing.service import PassingService
 
 
-__all__ = ['PublicationServiceInterface', 'PublicationService', 'FeedService']
+def get_olymp_data_service():
+    return OlympDataService()
+
+
+def get_boundary_service():
+    return BoundaryService()
+
+
+def get_passing_service():
+    return PassingService()
+
+
+__all__ = ['get_olymp_data_service', 'get_boundary_service', 'get_passing_service']

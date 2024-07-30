@@ -1,0 +1,2 @@
+class PassingService:
+    pass

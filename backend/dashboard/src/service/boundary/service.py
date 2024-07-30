@@ -1,0 +1,2 @@
+class BoundaryService:
+    pass
