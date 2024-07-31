@@ -21,6 +21,9 @@ class OlympORM(BaseTable):
     # Баллы участников
     points: Mapped[float] = mapped_column(sa.Float, nullable=False)
 
+    # Год проведения
+    year: Mapped[int] = mapped_column(sa.Integer, nullable=False)
+
     # Классы участников
     user_class: Mapped[Optional[int]] = mapped_column(sa.SmallInteger, nullable=True)
 

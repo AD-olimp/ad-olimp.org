@@ -15,8 +15,6 @@ data_feed_handler_router = APIRouter(
 )
 
 
-
-
 @data_feed_handler_router.get("/search/{search_text}/")
 async def search(search_text, service=Depends()):
     ...
@@ -26,8 +24,7 @@ async def search(search_text, service=Depends()):
 async def olymp_data_feed(
         data_filter: OlympDataFilter,
         service: OlympDataService = Depends(get_olymp_data_service)
-) -> Sequence[AbstractModel | None]:
-    """Получить список олимпиад """
+) -> list[OlympData] | None:
     return await service.get_many(data_filter=data_filter)
 
 

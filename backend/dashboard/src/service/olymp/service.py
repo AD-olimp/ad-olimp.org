@@ -16,10 +16,6 @@ class OlympDataService(DataServiceInterface):
     def __init__(self):
         self.repo = get_olymp_repository()
 
-    async def create(self, data: OlympData) -> Result:
-        async with get_session() as session:
-            return await self.repo.create(data=data, session=session)
-
     async def get(self, data_id) -> Result[Optional[AbstractModel]]:
         async with get_session() as session:
             return await self.repo.get(ident=data_id, session=session)

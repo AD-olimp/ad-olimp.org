@@ -20,38 +20,17 @@ class DataRepositoryI(ABC):
     def __init__(self, model):
         self.model = model
 
-    @abstractmethod
-    async def create(self, data: AbstractModel, session: AsyncSession) -> Result:
-        ...
-
     async def get(self, ident, session: AsyncSession) -> AbstractModel:
         return await session.get(entity=self.model, ident=ident)
 
-    async def get_by_where(self, where_statement, session: AsyncSession) -> Row[tuple[Any]] | None:
-        return (
-            await session.execute(
-                select(self.model)
-                .where(where_statement)
-            )
-        ).one_or_none()
-
+    @abstractmethod
     async def get_many(
             self,
             session: AsyncSession,
-            where_statement,
-            limit: int = 100) -> Sequence[BaseTable]:
-        return (
-            await session.scalars(
-                select(self.model)
-                .where(where_statement)
-                .limit(limit)
-            )
-        ).all()
+            data_filter,
+            limit: int = 100):
+        ...
 
-    async def delete(self, where_statement, session: AsyncSession) -> Result:
-        await session.execute(
-            delete(self.model).where(where_statement)
-        )
-
+    @abstractmethod
     async def update(self, session, ident, data: AbstractModel):
         ...
