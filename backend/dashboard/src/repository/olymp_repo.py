@@ -1,4 +1,6 @@
-from sqlalchemy import Sequence, select, and_
+from typing import Any
+
+from sqlalchemy import Sequence, select, and_, update, bindparam, ScalarResult
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .interface import DataRepositoryI, AbstractModel
@@ -7,9 +9,6 @@ from src.models.dto.dashboard import DataFilter
 
 
 class OlympRepository(DataRepositoryI):
-    async def update(self, session, ident, data: AbstractModel):
-        pass
-
     async def get_many(
             self,
             session: AsyncSession,
@@ -19,7 +18,6 @@ class OlympRepository(DataRepositoryI):
                  select(self.model)
                 .where(and_(
                     OlympORM.title.in_(data_filter.title),
-                    OlympORM.user_class.in_(data_filter.user_class),
-
+                    OlympORM.user_class.in_(data_filter.user_class)
                 ))
                 .limit(limit))).all()

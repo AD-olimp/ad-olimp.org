@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import TypeVar, Tuple, Any
 
 from result import Result
-from sqlalchemy import select, Sequence, delete, Row
+from sqlalchemy import select, Sequence, delete, Row, RowMapping, ScalarResult, update, bindparam
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.models.orm.base import BaseTable
@@ -28,9 +28,19 @@ class DataRepositoryI(ABC):
             self,
             session: AsyncSession,
             data_filter,
-            limit: int = 100):
+            limit: int = 100) -> Sequence[Row[Any] | RowMapping | Any]:
         ...
 
-    @abstractmethod
-    async def update(self, session, ident, data: AbstractModel):
-        ...
+    async def update(
+            self,
+            session: AsyncSession,
+            ident,
+            data: AbstractModel
+    ) -> ScalarResult[Any]:
+        return (await session.scalars(
+            update(self.model)
+            .where(self.model.c.id == bindparam(ident))
+            .values(
+                **data.dict()
+            )
+        ))

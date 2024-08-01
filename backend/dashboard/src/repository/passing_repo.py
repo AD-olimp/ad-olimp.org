@@ -1,4 +1,5 @@
-from sqlalchemy import Sequence, select, and_
+from sqlalchemy import Sequence, select, and_, ScalarResult, update, bindparam
+from sqlalchemy.dialects.postgresql import Any
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .interface import DataRepositoryI, AbstractModel
@@ -21,7 +22,3 @@ class PassingPointRepository(DataRepositoryI):
                 PassingPointORM.user_class.in_(data_filter.user_class)
             ))
             .limit(limit))).all()
-
-    async def update(self, session, ident, data: AbstractModel):
-        pass
-        

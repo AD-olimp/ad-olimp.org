@@ -1,4 +1,6 @@
-from sqlalchemy import select, and_
+from typing import Any, Sequence
+
+from sqlalchemy import select, and_, Row, RowMapping, ScalarResult, update, bindparam
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .interface import DataRepositoryI, AbstractModel
@@ -7,17 +9,11 @@ from src.models.orm.boundary import BoundaryPointORM
 
 
 class BoundaryPointRepository(DataRepositoryI):
-    async def update(self, session, ident, data: AbstractModel):
-        ...
-
-    async def get(self, session: AsyncSession, data_filter):
-        ...
-
     async def get_many(
             self,
             session: AsyncSession,
             data_filter: DataFilter,
-            limit: int = 100) -> None:
+            limit: int = 100) -> Sequence[Row[Any] | RowMapping | Any]:
         return (await session.scalars(
                  select(self.model)
                 .where(and_(
