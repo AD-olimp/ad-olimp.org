@@ -3,7 +3,7 @@ from typing import Optional
 from sqlalchemy import Sequence
 
 from src.database.session import get_session
-from src.models.dto.dashboard import OlympData, OlympDataFilter
+from src.models.dto.dashboard import OlympData, DataFilter
 from src.repository import get_olymp_repository
 from src.service.base import DataServiceInterface, AbstractModel
 
@@ -20,16 +20,10 @@ class OlympDataService(DataServiceInterface):
         async with get_session() as session:
             return await self.repo.get(ident=data_id, session=session)
 
-    async def get_many(self, data_filter: OlympDataFilter) -> Sequence[Optional[AbstractModel]]:
+    async def get_many(self, data_filter: DataFilter) -> Sequence[Optional[AbstractModel]]:
         async with get_session() as session:
-            return await self.repo.get_many(session=session, where_statement=data_filter)
-        # TODO: прописать здесь норм стейтмент
+            return await self.repo.get_many(session=session, data_filter=data_filter)
 
     async def update(self, data_id, new_data: AbstractModel) -> Result:
         async with get_session() as session:
             return await self.repo.update(session=session, ident=data_id, data=new_data)
-
-    async def delete(self, data_id) -> Result:
-        async with get_session() as session:
-            return await self.repo.delete(session=session, where_statement=data_id)
-        # TODO: прописать здесь норм стейтмент
