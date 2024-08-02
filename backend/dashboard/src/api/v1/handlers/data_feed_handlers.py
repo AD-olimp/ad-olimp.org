@@ -4,7 +4,7 @@ from sqlalchemy import Sequence
 from src.service import get_passing_service, get_olymp_data_service, get_boundary_service, OlympDataService, \
     PassingService, BoundaryService
 from src.models.dto.dashboard import (
-    OlympDataFilter,
+    DataFilter,
     OlympData
 )
 from src.service.base import AbstractModel
@@ -22,24 +22,24 @@ async def search(search_text, service=Depends()):
 
 @data_feed_handler_router.get("/olimp/{data_filter}/")
 async def olymp_data_feed(
-        data_filter: OlympDataFilter,
+        data_filter: DataFilter,
         service: OlympDataService = Depends(get_olymp_data_service)
-) -> list[OlympData] | None:
+) -> Sequence[AbstractModel | None]:
     return await service.get_many(data_filter=data_filter)
 
 
 @data_feed_handler_router.get("/passing/{data_filter}/")
 async def passing_feed(
-        data_filter: OlympDataFilter,
+        data_filter: DataFilter,
         service: PassingService = Depends(get_passing_service)
-) -> list[OlympData]:
+) -> Sequence[AbstractModel | None]:
     """Получить список олимпиад """
     return await service.get_many(data_filter=data_filter)
 
 
 @data_feed_handler_router.get("/olymp/{data_filter}/")
 async def boundary_feed(
-        data_filter: OlympDataFilter,
+        data_filter: DataFilter,
         service: BoundaryService = Depends(get_boundary_service)
 ) -> Sequence[AbstractModel | None]:
     """Получить список олимпиад """
