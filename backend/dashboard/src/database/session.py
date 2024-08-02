@@ -1,8 +1,9 @@
 from contextlib import asynccontextmanager
 
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 from sqlalchemy.ext.asyncio import create_async_engine as _create_async_engine
 from sqlalchemy.orm import sessionmaker
+
 
 from src.config import configuration
 
@@ -14,7 +15,7 @@ async_engine: AsyncEngine = _create_async_engine(
 )
 
 
-AsyncSessionLocal = sessionmaker(
+AsyncSessionLocal = async_sessionmaker(
     bind=async_engine,
     expire_on_commit=False,
     class_=AsyncSession
