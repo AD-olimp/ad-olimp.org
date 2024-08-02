@@ -44,3 +44,45 @@ class BoundaryData(BaseModel):
     pre_winner_boundary_points: list[float]  # Проходные баллы участников
     years: list[str]                         # Даты (лучше строкой)
     user_class: list[int]                    # Какой класс писал олимпиаду
+
+
+class OlympDataORM(BaseModel):
+    title: OlympTitle
+    # Тип диплома участников
+    grade: Grades
+    # Баллы участников
+    points: float
+    # Год проведения
+    year: int
+    # Классы участников
+    user_class: Optional[int]
+    # Имена участников
+    names: Optional[str]
+    # Регион участников
+    region: Optional[str]
+    # Школы участников
+    school: Optional[str]
+
+
+class PassingDataORM(BaseModel):
+    # Проходные баллы на олимпиаду (ось У)
+    passing_points: float
+    # Даты проведения (ось Х)
+    years: str
+    # Название олимпиады
+    title: OlympTitle
+    # Классы участников
+    user_class: Optional[int]
+
+
+class BoundaryDataORM(BaseModel):
+    # Граничные баллы на победителя (ось У)
+    winner_boundary_points: float
+    # Граничные баллы на призера (ось У)
+    pre_winner_boundary_points: float
+    # Даты проведения (ось Х)
+    years: int
+    # Название олимпиады
+    title: OlympTitle
+    # Класс участников
+    user_class: Optional[int]

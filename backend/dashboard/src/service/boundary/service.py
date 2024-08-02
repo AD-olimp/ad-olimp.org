@@ -15,7 +15,7 @@ class BoundaryService(DataServiceInterface):
     def __init__(self):
         self.repo = get_boundary_repository()
 
-    async def get(self, data_id) -> Result[Optional[AbstractModel]]:
+    async def get(self, data_id):
         async with get_session() as session:
             return await self.repo.get(ident=data_id, session=session)
 
