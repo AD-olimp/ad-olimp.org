@@ -3,10 +3,8 @@ from typing import Optional, Any
 from sqlalchemy import Sequence, ScalarResult
 
 from src.database.session import get_session
-from src.models.dto.dashboard import BoundaryData
 from src.service.base import DataServiceInterface, AbstractModel
 from src.repository import get_boundary_repository
-from result import Result
 
 
 class BoundaryService(DataServiceInterface):

@@ -1,10 +1,10 @@
 from typing import Any, Sequence
 
-from sqlalchemy import select, and_, Row, RowMapping, ScalarResult, update, bindparam
+from sqlalchemy import select, and_, Row, RowMapping
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .interface import DataRepositoryI, AbstractModel
-from src.models.dto.dashboard import DataFilter
+from .interface import DataRepositoryI
+from src.models.dto.schemas_get.dashboard import DataFilter
 from src.models.orm.boundary import BoundaryPointORM
 
 

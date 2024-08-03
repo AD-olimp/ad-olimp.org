@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar, Optional
 
-from src.models.dto.dashboard import DataFilter
+from src.models.dto.schemas_get.dashboard import DataFilter
 
 AbstractModel = TypeVar('AbstractModel')
 

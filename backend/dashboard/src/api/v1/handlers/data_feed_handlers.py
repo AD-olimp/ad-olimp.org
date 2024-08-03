@@ -1,13 +1,10 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy import Sequence
 
 from src.service import get_passing_service, get_olymp_data_service, get_boundary_service, OlympDataService, \
     PassingService, BoundaryService
-from src.models.dto.dashboard import (
-    DataFilter,
-    OlympData
+from src.models.dto.schemas_get.dashboard import (
+    DataFilter
 )
-from src.service.base import AbstractModel
 
 data_feed_handler_router = APIRouter(
     prefix="/feed",
@@ -24,7 +21,7 @@ async def search(search_text, service=Depends()):
 async def olymp_data_feed(
         data_filter: DataFilter,
         service: OlympDataService = Depends(get_olymp_data_service)
-):  # -> Sequence[AbstractModel | None]:
+):
     return await service.get_many(data_filter=data_filter)
 
 
@@ -32,7 +29,7 @@ async def olymp_data_feed(
 async def passing_feed(
         data_filter: DataFilter,
         service: PassingService = Depends(get_passing_service)
-):  # -> Sequence[AbstractModel | None]:
+):
     """Получить список олимпиад """
     return await service.get_many(data_filter=data_filter)
 
@@ -41,6 +38,6 @@ async def passing_feed(
 async def boundary_feed(
         data_filter: DataFilter,
         service: BoundaryService = Depends(get_boundary_service)
-):  # -> Sequence[AbstractModel | None]:
+):
     """Получить список олимпиад """
     return await service.get_many(data_filter=data_filter)

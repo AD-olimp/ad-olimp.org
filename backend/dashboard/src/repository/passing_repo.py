@@ -1,11 +1,9 @@
-from sqlalchemy import Sequence, select, and_, ScalarResult, update, bindparam
-from sqlalchemy.dialects.postgresql import Any
+from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .interface import DataRepositoryI, AbstractModel
+from .interface import DataRepositoryI
 from src.models.orm.passing import PassingPointORM
-from ..models.dto.dashboard import DataFilter
-from ..models.orm.base import BaseTable
+from src.models.dto.schemas_get.dashboard import DataFilter
 
 
 class PassingPointRepository(DataRepositoryI):

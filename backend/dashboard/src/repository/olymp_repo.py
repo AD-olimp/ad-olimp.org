@@ -1,11 +1,9 @@
-from typing import Any
-
-from sqlalchemy import Sequence, select, and_, update, bindparam, ScalarResult
+from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .interface import DataRepositoryI, AbstractModel
+from .interface import DataRepositoryI
 from src.models.orm.olymp import OlympORM
-from src.models.dto.dashboard import DataFilter
+from src.models.dto.schemas_get.dashboard import DataFilter
 
 
 class OlympRepository(DataRepositoryI):

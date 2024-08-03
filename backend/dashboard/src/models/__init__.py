@@ -1,14 +1,10 @@
-from src.models.dto.dashboard import (
+from src.models.dto.schemas_get.dashboard import (
     PassingData,
     PassingDataFilter,
     Grades,
 )
 
 __all__ = [
-    'OlimpData',
-    'OlimpDataFilter',
-    'PassingDataList',
-    'OlimpDataList',
     'PassingData',
     'PassingDataFilter',
     'Grades',

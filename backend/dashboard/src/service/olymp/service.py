@@ -3,11 +3,9 @@ from typing import Optional, Any
 from sqlalchemy import Sequence, ScalarResult
 
 from src.database.session import get_session
-from src.models.dto.dashboard import OlympData, DataFilter, OlympDataORM
+from src.models.dto.schemas_get.dashboard import DataFilter
 from src.repository import get_olymp_repository
 from src.service.base import DataServiceInterface, AbstractModel
-
-from result import Result
 
 
 class OlympDataService(DataServiceInterface):
@@ -24,6 +22,6 @@ class OlympDataService(DataServiceInterface):
         async with get_session() as session:
             return await self.repo.get_many(session=session, data_filter=data_filter)
 
-    async def update(self, data_id, new_data: OlympDataORM) -> ScalarResult[Any]:
+    async def update(self, data_id, new_data) -> ScalarResult[Any]:
         async with get_session() as session:
             return await self.repo.update(session=session, ident=data_id, data=new_data)

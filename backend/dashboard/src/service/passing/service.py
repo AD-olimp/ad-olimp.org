@@ -1,9 +1,8 @@
 from typing import Optional, Any
 
-from sqlalchemy import Sequence, Result, ScalarResult
+from sqlalchemy import Sequence, ScalarResult
 
 from src.database.session import get_session
-from src.models.dto.dashboard import DataFilter
 from src.repository import get_passing_repository
 from src.service.base import DataServiceInterface, AbstractModel
 
