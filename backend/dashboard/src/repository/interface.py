@@ -2,9 +2,10 @@ from abc import ABC, abstractmethod
 from typing import TypeVar, Tuple, Any
 
 from result import Result
-from sqlalchemy import select, Sequence, delete, Row, RowMapping, ScalarResult, update, bindparam
+from sqlalchemy import select, Sequence, delete, Row, RowMapping, ScalarResult, update, bindparam, insert, CursorResult
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.models.orm import OlympORM
 from src.models.orm.base import BaseTable
 
 AbstractModel = TypeVar('AbstractModel')
@@ -34,13 +35,22 @@ class DataRepositoryI(ABC):
     async def update(
             self,
             session: AsyncSession,
-            ident,
+            ident: int,
             data: AbstractModel
-    ) -> ScalarResult[Any]:
-        return (await session.scalars(
+    ) -> CursorResult[Any]:
+        stmt = (
             update(self.model)
-            .where(self.model.c.id == bindparam(ident))
+            .where(self.model.id == ident)
             .values(
                 **data.dict()
             )
-        ))
+        )
+        return await session.execute(stmt)
+
+    async def insert(
+            self,
+            session: AsyncSession,
+            data: AbstractModel
+    ):
+        return await session.scalars(insert(self.model).values(**data.dict()))
+

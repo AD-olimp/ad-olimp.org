@@ -6,7 +6,7 @@ from src.models.common import OlympTitle, Step, Grades
 
 
 class DataFilter(BaseModel):
-    years: Optional[list[conint(gt=2000)]] = Field(default=datetime.datetime.now().year)
+    year: Optional[list[conint(gt=2000)]] = Field(default=[datetime.datetime.now().year, ])
     user_class: Optional[list[conint(gt=0, lt=12)]] = Field(default=[9, 10, 11])
     title: Optional[list[OlympTitle]]
     step: Optional[list[Step]]

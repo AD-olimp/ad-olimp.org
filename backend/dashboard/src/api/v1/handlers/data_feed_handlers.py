@@ -17,7 +17,7 @@ async def search(search_text, service=Depends()):
     ...
 
 
-@data_feed_handler_router.get("/olimp/")
+@data_feed_handler_router.post("/olymp/")
 async def olymp_data_feed(
         data_filter: DataFilter,
         service: OlympDataService = Depends(get_olymp_data_service)
@@ -25,7 +25,7 @@ async def olymp_data_feed(
     return await service.get_many(data_filter=data_filter)
 
 
-@data_feed_handler_router.get("/passing/")
+@data_feed_handler_router.post("/passing/")
 async def passing_feed(
         data_filter: DataFilter,
         service: PassingService = Depends(get_passing_service)
@@ -34,7 +34,7 @@ async def passing_feed(
     return await service.get_many(data_filter=data_filter)
 
 
-@data_feed_handler_router.get("/olymp/")
+@data_feed_handler_router.post("/boundary/")
 async def boundary_feed(
         data_filter: DataFilter,
         service: BoundaryService = Depends(get_boundary_service)

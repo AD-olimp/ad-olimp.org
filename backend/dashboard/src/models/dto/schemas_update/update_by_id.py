@@ -18,7 +18,7 @@ class UpdateOlympDataScheme(BaseModel):
 
 class UpdatePassingDataScheme(BaseModel):
     passing_points: float
-    years: str
+    years: int
     title: OlympTitle
     user_class: Optional[int]
 

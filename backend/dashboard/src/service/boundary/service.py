@@ -1,8 +1,9 @@
 from typing import Optional, Any
 
-from sqlalchemy import Sequence, ScalarResult
+from sqlalchemy import Sequence, CursorResult
 
 from src.database.session import get_session
+from src.models.dto.schemas_update.update_by_id import UpdateBoundaryDataScheme
 from src.service.base import DataServiceInterface, AbstractModel
 from src.repository import get_boundary_repository
 
@@ -21,6 +22,10 @@ class BoundaryService(DataServiceInterface):
         async with get_session() as session:
             return await self.repo.get_many(session=session, data_filter=data_filter)
 
-    async def update(self, data_id, new_data: AbstractModel) -> ScalarResult[Any]:
+    async def update(self, data_id, new_data: AbstractModel) -> CursorResult[Any]:
         async with get_session() as session:
             return await self.repo.update(session=session, ident=data_id, data=new_data)
+
+    async def insert(self, data: UpdateBoundaryDataScheme):
+        async with get_session() as session:
+            return await self.repo.insert(session=session, data=data)
