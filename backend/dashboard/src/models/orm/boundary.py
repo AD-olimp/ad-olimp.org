@@ -23,7 +23,7 @@ class BoundaryPointORM(BaseTable):
     years: Mapped[int] = mapped_column(sa.Integer, nullable=False)
 
     # Название олимпиады
-    title: Mapped[OlympTitle] = mapped_column(sa.Enum, nullable=False)
+    title: Mapped[OlympTitle] = mapped_column(sa.Enum(OlympTitle), nullable=False)
 
     # Класс участников
     user_class: Mapped[Optional[int]] = mapped_column(sa.SmallInteger, nullable=True)

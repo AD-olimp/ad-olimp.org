@@ -13,10 +13,10 @@ class OlympORM(BaseTable):
     __tablename__ = 'olymp_point'
 
     # Olymp title
-    title: Mapped[OlympTitle] = mapped_column(sa.Enum, nullable=False)
+    title: Mapped[OlympTitle] = mapped_column(sa.Enum(OlympTitle), nullable=False)
 
     # Тип диплома участников
-    grade: Mapped[Grades] = mapped_column(sa.Enum, nullable=False)
+    grade: Mapped[Grades] = mapped_column(sa.Enum(Grades), nullable=False)
 
     # Баллы участников
     points: Mapped[float] = mapped_column(sa.Float, nullable=False)

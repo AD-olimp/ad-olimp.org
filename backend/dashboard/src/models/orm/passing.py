@@ -19,7 +19,7 @@ class PassingPointORM(BaseTable):
     years: Mapped[str] = mapped_column(sa.String(10), nullable=False)
 
     # Название олимпиады
-    title: Mapped[OlympTitle] = mapped_column(sa.Enum, nullable=False)
+    title: Mapped[OlympTitle] = mapped_column(sa.Enum(OlympTitle), nullable=False)
 
     # Классы участников
     user_class: Mapped[Optional[int]] = mapped_column(sa.SmallInteger, nullable=True)
