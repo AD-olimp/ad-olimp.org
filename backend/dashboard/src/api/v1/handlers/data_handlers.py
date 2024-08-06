@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 
+from src.models.dto.schemas_get.dashboard import OlympData, PassingData, BoundaryData
 from src.models.dto.schemas_update.update_by_id import UpdateOlympDataScheme, UpdatePassingDataScheme, \
     UpdateBoundaryDataScheme
 from src.service import get_passing_service, get_olymp_data_service, get_boundary_service, OlympDataService, \
@@ -11,27 +12,27 @@ data_handler_router = APIRouter(
 )
 
 
-@data_handler_router.get("/olymp/{data_id}")
+@data_handler_router.get("/olymp/{data_id}", response_model=OlympData)
 async def get_olymp_data(
         data_id: int,
         service: OlympDataService = Depends(get_olymp_data_service)
-):
+) -> OlympData:
     return await service.get(data_id=data_id)
 
 
-@data_handler_router.get("/passing/{data_id}")
+@data_handler_router.get("/passing/{data_id}", response_model=PassingData)
 async def get_passing_data(
         data_id: int,
         service: PassingService = Depends(get_passing_service)
-):
+) -> PassingData:
     return await service.get(data_id=data_id)
 
 
-@data_handler_router.get("/boundary/{data_id}")
+@data_handler_router.get("/boundary/{data_id}", response_model=BoundaryData)
 async def get_boundary_data(
         data_id: int,
         service: BoundaryService = Depends(get_boundary_service)
-):
+) -> BoundaryData:
     return await service.get(data_id=data_id)
 
 

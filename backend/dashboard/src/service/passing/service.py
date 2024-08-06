@@ -3,6 +3,7 @@ from typing import Optional, Any
 from sqlalchemy import Sequence, CursorResult
 
 from src.database.session import get_session
+from src.models import PassingData
 from src.models.dto.schemas_update.update_by_id import UpdatePassingDataScheme
 from src.repository import get_passing_repository
 from src.service.base import DataServiceInterface, AbstractModel
@@ -14,11 +15,12 @@ class PassingService(DataServiceInterface):
     def __init__(self):
         self.repo = get_passing_repository()
 
-    async def get(self, data_id):
+    async def get(self, data_id) -> PassingData:
         async with get_session() as session:
-            return await self.repo.get(ident=data_id, session=session)
+            data = await self.repo.get(ident=data_id, session=session)
+        return PassingData.model_validate(data, from_attributes=True)
 
-    async def get_many(self, data_filter) -> Sequence[Optional[AbstractModel]]:
+    async def get_many(self, data_filter) -> list[PassingData]:
         async with get_session() as session:
             return await self.repo.get_many(session=session, data_filter=data_filter)
 
