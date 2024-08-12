@@ -13,7 +13,7 @@ class DataServiceInterface(ABC, Generic[AbstractModel]):
         ...
 
     @abstractmethod
-    async def get(self, data_id) -> Optional[AbstractModel]:
+    async def get(self, data_id, session_getter) -> Optional[AbstractModel]:
         ...
 
     @abstractmethod

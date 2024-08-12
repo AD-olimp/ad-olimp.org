@@ -1,5 +1,5 @@
 from sqlalchemy import Integer, MetaData
-from sqlalchemy.ext.declarative import as_declarative
+from sqlalchemy.orm import as_declarative
 from sqlalchemy.orm import Mapped, declared_attr, mapped_column
 
 
