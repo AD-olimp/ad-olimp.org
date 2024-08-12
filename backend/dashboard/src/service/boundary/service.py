@@ -1,10 +1,9 @@
-from typing import Optional, Any
+from typing import Any
 
-from sqlalchemy import Sequence, CursorResult
+from sqlalchemy import CursorResult
 
 from src.database.session import get_session
-from src.models.dto.schemas_get.dashboard import BoundaryData, PassingData
-from src.models.dto.schemas_update.update_by_id import UpdateBoundaryDataScheme
+from src.models.dto.dashboard import BoundaryData
 from src.service.base import DataServiceInterface, AbstractModel
 from src.repository import get_boundary_repository
 

@@ -1,9 +1,11 @@
-from src.models.dto.schemas_get.dashboard import (
+from src.models.dto.dashboard import (
     PassingData,
-    Grades,
+    OlympData,
+    BoundaryData,
 )
 
 __all__ = [
     'PassingData',
-    'Grades',
+    'OlympData',
+    'BoundaryData',
 ]

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 
 from src.service import get_passing_service, get_olymp_data_service, get_boundary_service, OlympDataService, \
     PassingService, BoundaryService
-from src.models.dto.schemas_get.dashboard import (
+from src.models.dto.dashboard import (
     DataFilter, OlympData, PassingData, BoundaryData
 )
 

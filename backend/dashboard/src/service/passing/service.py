@@ -4,7 +4,6 @@ from sqlalchemy import Sequence, CursorResult
 
 from src.database.session import get_session
 from src.models import PassingData
-from src.models.dto.schemas_update.update_by_id import UpdatePassingDataScheme
 from src.repository import get_passing_repository
 from src.service.base import DataServiceInterface, AbstractModel
 
@@ -15,8 +14,8 @@ class PassingService(DataServiceInterface):
     def __init__(self):
         self.repo = get_passing_repository()
 
-    async def get(self, data_id) -> PassingData:
-        async with get_session() as session:
+    async def get(self, data_id, session_getter=get_session) -> PassingData:
+        async with session_getter() as session:
             data = await self.repo.get(ident=data_id, session=session)
         return PassingData.model_validate(data, from_attributes=True)
 
@@ -28,6 +27,6 @@ class PassingService(DataServiceInterface):
         async with get_session() as session:
             return await self.repo.update(session=session, ident=data_id, data=new_data)
 
-    async def insert(self, data: UpdatePassingDataScheme):
+    async def insert(self, data: PassingData):
         async with get_session() as session:
             return await self.repo.insert(session=session, data=data)

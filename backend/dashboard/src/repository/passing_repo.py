@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .interface import DataRepositoryI
 from src.models.orm.passing import PassingPointORM
-from src.models.dto.schemas_get.dashboard import DataFilter, PassingData
+from src.models.dto.dashboard import DataFilter, PassingData
 
 
 class PassingPointRepository(DataRepositoryI):

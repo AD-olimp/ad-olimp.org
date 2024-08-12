@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from src.models.dto.schemas_get.dashboard import OlympData, PassingData, BoundaryData
-from src.models.dto.schemas_update.update_by_id import UpdateOlympDataScheme, UpdatePassingDataScheme, \
-    UpdateBoundaryDataScheme
+from src.models.dto.dashboard import OlympData, PassingData, BoundaryData
 from src.service import get_passing_service, get_olymp_data_service, get_boundary_service, OlympDataService, \
     PassingService, BoundaryService
 
@@ -39,7 +37,7 @@ async def get_boundary_data(
 @data_handler_router.put("/olymp/{data_id}")
 async def update_olymp_data(
         data_id: int,
-        new_data: UpdateOlympDataScheme,
+        new_data: OlympData,
         service: OlympDataService = Depends(get_olymp_data_service)
 ):
     return await service.update(data_id=data_id, new_data=new_data)
@@ -48,7 +46,7 @@ async def update_olymp_data(
 @data_handler_router.put("/passing/{data_id}")
 async def update_passing_data(
         data_id: int,
-        new_data: UpdatePassingDataScheme,
+        new_data: PassingData,
         service: PassingService = Depends(get_passing_service)
 ):
     return await service.update(data_id=data_id, new_data=new_data)
@@ -57,7 +55,7 @@ async def update_passing_data(
 @data_handler_router.put("/boundary/{data_id}")
 async def update_boundary_data(
         data_id: int,
-        new_data: UpdateBoundaryDataScheme,
+        new_data: BoundaryData,
         service: BoundaryService = Depends(get_boundary_service)
 ):
     return await service.update(data_id=data_id, new_data=new_data)
@@ -65,7 +63,7 @@ async def update_boundary_data(
 
 @data_handler_router.post("/olymp/")
 async def insert_olymp_data(
-        data: UpdateOlympDataScheme,
+        data: OlympData,
         service: OlympDataService = Depends(get_olymp_data_service)
 ):
     return await service.insert(data=data)
@@ -73,7 +71,7 @@ async def insert_olymp_data(
 
 @data_handler_router.post("/passing/")
 async def insert_passing_data(
-        data: UpdatePassingDataScheme,
+        data: PassingData,
         service: PassingService = Depends(get_passing_service)
 ):
     return await service.insert(data=data)
@@ -81,7 +79,7 @@ async def insert_passing_data(
 
 @data_handler_router.post("/boundary/")
 async def insert_boundary_data(
-        data: UpdateBoundaryDataScheme,
+        data: BoundaryData,
         service: BoundaryService = Depends(get_boundary_service)
 ):
     return await service.insert(data=data)

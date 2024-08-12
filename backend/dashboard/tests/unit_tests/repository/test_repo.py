@@ -1,7 +1,7 @@
 import pytest
 from contextlib import nullcontext as does_not_raise
 
-from src.models.dto.schemas_get.dashboard import BoundaryData
+from src.models.dto.dashboard import BoundaryData
 from src.service import BoundaryService
 from tests.conftest import get_session_test, setup_db, event_loop
 
@@ -11,7 +11,7 @@ def get_test_data():
         (BoundaryData(winner_boundary_points=145, pre_winner_boundary_points=135, years=2024,
                       title="Высшая проба", user_class=11), does_not_raise()),
         (BoundaryData(winner_boundary_points=160, pre_winner_boundary_points=155, years=2023,
-                      title="Сибириада", user_class=10), does_not_raise())
+                      title="Сибириада", user_class=11), does_not_raise())
     ]
     return test_data
 
@@ -36,8 +36,8 @@ class TestRepository:
     @pytest.mark.parametrize(
         "ident, expected_data, expectation",
         [
-            (31, *get_test_data()[1]),
-            (32, *get_test_data()[0]),
+            (1, *get_test_data()[0]),
+            (2, *get_test_data()[1]),
         ]
     )
     @pytest.mark.asyncio
@@ -49,8 +49,8 @@ class TestRepository:
     @pytest.mark.parametrize(
         "ident, new_data, expectation",
         [
-            (31, *get_test_data()[1]),
-            (32, *get_test_data()[0])
+            (1, *get_test_data()[1]),
+            (2, *get_test_data()[0])
         ]
     )
     @pytest.mark.asyncio

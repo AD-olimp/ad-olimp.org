@@ -1,8 +1,8 @@
-from sqlalchemy import select, and_, Row, RowMapping
+from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .interface import DataRepositoryI
-from src.models.dto.schemas_get.dashboard import DataFilter, BoundaryData
+from src.models.dto.dashboard import DataFilter, BoundaryData
 from src.models.orm.boundary import BoundaryPointORM
 
 
